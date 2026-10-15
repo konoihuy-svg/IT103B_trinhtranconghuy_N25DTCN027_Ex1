@@ -1,0 +1,15 @@
+# Giải quyết Bài toán: Dò vết & Sửa lỗi Điều kiện Biên Thời gian Ân hạn Thanh toán Thuê bao
+
+## 1. Phân tích lỗi
+Dòng lệnh sai logic nằm ở điều kiện `if (sub.daysOverdue >= 3)`. Việc sử dụng toán tử `>=` (lớn hơn hoặc bằng 3) khiến hệ thống hạ cấp thuê bao ngay từ ngày nợ cước thứ 3. 
+
+Theo yêu cầu nghiệp vụ, 3 ngày đầu tiên (`<= 3`) vẫn thuộc thời gian ân hạn (Grace Period) và khách hàng phải được giữ nguyên gói dịch vụ hiện tại. Hệ thống chỉ được phép hạ cấp về gói miễn phí từ ngày nợ cước thứ 4 trở đi. Nguyên nhân kỹ thuật dẫn đến sự cố là do xác định sai điều kiện biên của thời gian.
+
+**Cách khắc phục:** Sửa lại điều kiện kiểm tra thành `sub.daysOverdue > 3`.
+
+## 2. Bảng Test Cases
+
+| Trường hợp kiểm thử | Dữ liệu đầu vào | Kết quả sai thực tế (Mã cũ) | Kết quả đúng mong đợi |
+| :--- | :--- | :--- | :--- |
+| Nợ cước 3 ngày (Trong hạn ân hạn) | `daysOverdue: 3` | `planTier`: 'FREE'<br>`deviceLimit`: 1<br>`status`: 'EXPIRED' | `planTier`: 'FAMILY' (giữ nguyên)<br>`deviceLimit`: 5 (giữ nguyên)<br>`status`: 'GRACE_PERIOD' |
+| Nợ cước 4 ngày (Quá hạn ân hạn) | `daysOverdue: 4` | `planTier`: 'FREE'<br>`deviceLimit`: 1<br>`status`: 'EXPIRED' | `planTier`: 'FREE'<br>`deviceLimit`: 1<br>`status`: 'EXPIRED' |
